@@ -1,0 +1,339 @@
+<?php
+
+session_start();
+
+include_once("classes/autoload.php");
+
+// Set session timeout (in seconds)
+$session_timeout = 1800; // 30 minutes
+
+// Check if user is logged in
+if (isset($_SESSION['myTT_userid']) && is_numeric($_SESSION['myTT_userid'])) {
+      $id = $_SESSION['myTT_userid'];
+      $login = new Login();
+
+      $result = $login->check_login($id);
+
+      if ($result) {
+            $user = new User();
+            $user_data = $user->get_data($id);
+
+            if (!$user_data) {
+                  header("Location:login.php");
+                  die;
+            }
+
+            // Check if the user is a admin
+            if ($user_data['rank'] != 'admin') {
+                  // Redirect to login page if the user is not a student
+                  header("Location:login.php");
+                  die;
+            }
+
+            // Update last activity timestamp
+            $_SESSION['last_activity'] = time();
+      } else {
+            header("Location:login.php");
+            die;
+      }
+} else {
+      header("Location:login.php");
+      die;
+}
+
+// Check session timeout
+if (isset($_SESSION['last_activity'])) {
+      $current_time = time();
+      $last_activity = $_SESSION['last_activity'];
+      if (($current_time - $last_activity) > $session_timeout) {
+            // Session expired, destroy session and redirect to login page
+            session_unset();
+            session_destroy();
+            header("Location: login.php");
+            die;
+      }
+}
+
+
+if (isset($_SESSION['message'])) {
+      if ($_SESSION['message'] == 'success') {
+            include("alert.php");
+      } elseif ($_SESSION['message'] == 'danger') {
+            include("alertdanger.php");
+      }
+      // Unset the session message after displaying it
+      unset($_SESSION['message']);
+}
+
+
+//getting project deatils 
+
+if (isset($_GET['form'])) {
+
+      $encrypted_project_id = $_GET['form'];
+      $project_id = base64_decode($encrypted_project_id);
+
+      // fetch project details from the database
+      $post = new Post();
+      $id = $_SESSION['myTT_userid'];
+
+      $result = $post->project_detail($project_id);
+
+
+      if ($result) {
+            $project_name = $result['project_name'];
+      } else {
+            header("Location: adminhome.php");
+            die;
+      }
+
+      $subject_list = $post->project_form($project_id);
+} else {
+      // Handle case when project_id is not provided
+      header("Location: adminhome.php");
+      die;
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Administrator | Form</title>
+      <link href="./bootstrap/bootstrap.min.css" rel="stylesheet">
+      <link href="./bootstrap/styles.css" rel="stylesheet">
+      <style>
+            .project-head {
+                  width: 100%;
+                  padding: 20px;
+                  border: 1px solid #ddd;
+                  border-radius: 8px;
+                  margin-bottom: 30px;
+                  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+            }
+
+            h2 {
+                  margin-bottom: 0px;
+            }
+
+            .sub-detail {
+                  position: relative;
+                  width: 30%;
+                  height: 30vh;
+                  margin: 10px;
+                  border: 1px solid #ddd;
+                  border-radius: 8px;
+                  align-content: center;
+                  background-color: #8EC5FC;
+                  background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+
+
+            }
+
+            .sub-detail p {
+
+                  font-size: large;
+                  font-weight: 600;
+
+            }
+
+            .sub-slots {
+                  width: 70%;
+                  height: 30vh;
+                  margin: 10px;
+
+
+            }
+
+            .list-group {
+                  height: 100%;
+
+            }
+
+            .dot-menu {
+                  position: absolute;
+                  top: 10px;
+                  right: 10px;
+                  width: 15px;
+                  height: 20px;
+                  cursor: pointer;
+            }
+
+            .custom-scroll {
+                  max-height: 100%;
+                  overflow-y: auto;
+            }
+
+            .lab {
+                  background-color: #EEEEEE;
+            }
+
+            .menu {
+                  position: absolute;
+                  background-color: #f9f9f9;
+                  min-width: 120px;
+                  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                  z-index: 1000;
+                  top: -10px;
+                  /* Adjust as needed to position below the dots */
+                  right: 20px;
+                  border-radius: 8px;
+
+            }
+
+            .menu ul {
+                  list-style-type: none;
+                  padding: 0;
+                  border-radius: 8px;
+            }
+
+            .menu ul li {
+                  padding: 12px 16px;
+                  text-decoration: none;
+                  display: block;
+                  border-radius: 8px;
+            }
+
+            .menu ul li:hover {
+                  background-color: #f1f1f1;
+            }
+
+            .form-input {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 5px;
+
+            }
+
+            .name-input {
+                  display: flex;
+                  align-items: center;
+
+            }
+
+            .name-input label {
+                  flex: 0 0 10%;
+                  margin-right: 5px;
+
+                  /* Each label takes up 50% of the width */
+            }
+
+            .name-input input {
+                  flex: 1;
+                  /* Each input takes up remaining space */
+                  /* margin-right: 15px; */
+                  /* Optional: Add some spacing between inputs */
+            }
+
+            .contact_hour {
+                  display: flex;
+                  align-items: center;
+            }
+
+            .contact_hour label {
+                  flex: 0 0 35%;
+                  margin-right: 5px;
+            }
+      </style>
+</head>
+
+<body>
+      <?php include("adminTopbar.php"); ?>
+      <div id="body">
+            <div class="page d-flex flex-row">
+
+                  <section class="main">
+                        <div class="project-head d-flex justify-content-between align-items-center">
+                              <div>
+                                    <h2><?php echo $project_name ?></h2>
+                                    <span class="badge rounded-pill text-bg-secondary">forms</span>
+                              </div>
+
+                              <div class="d-flex flex-row gap-2">
+                                    <a type="button" class="btn btn-outline-primary" href="#">Defaulter</a>
+                                    <a type="button" class="btn btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#export">Export</a>
+
+                                    <div class="modal fade" id="export" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exportLabel" aria-hidden="true">
+                                          <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                      <form method="post">
+                                                            <div class="modal-header">
+                                                                  <h1 class="modal-title fs-5" id="exportLabel">Export</h1>
+                                                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                  <button type="submit" class="btn btn-primary">Download</button>
+                                                            </div>
+                                                      </form>
+                                                </div>
+                                          </div>
+                                    </div>
+
+                              </div>
+
+                        </div>
+                        <div class="alert alert-dark" role="alert">
+                              <strong>Note:</strong> The below form could only be edited after collecting the responses from the students.
+                        </div>
+                        <div class="project-head">
+                              <?php
+
+                              if ($subject_list) {
+                                    foreach ($subject_list as $row) {
+
+                                          if ($row['subject_type'] == 'ALC') {
+                                                include('alcSubject.php');
+                                          } elseif ($row['subject_type'] == 'Opted') {
+                                                include('optedSubject.php');
+                                          }
+                                    }
+                              } else {
+                                    echo '<div style="text-align: center; color: #a0a0a0;">
+                              No Optional Subjects found
+                              <br>
+                              This form is ONLY for Optional Subjects.
+                            </div>';
+                              }
+
+                              ?>
+                        </div>
+
+                  </section>
+
+            </div>
+      </div>
+
+      <script>
+            function toggleMenu(event) {
+                  // Prevents the click from affecting parent elements
+                  event.stopPropagation();
+                  // Toggle visibility logic
+                  var menu = event.currentTarget.querySelector('.menu');
+                  var isMenuVisible = menu.style.display === 'block';
+                  // Hide any already visible menus
+                  document.querySelectorAll('.menu').forEach(function(m) {
+                        m.style.display = 'none';
+                  });
+                  // Toggle the clicked menu
+                  menu.style.display = isMenuVisible ? 'none' : 'block';
+            }
+
+
+            // Clicking anywhere else on the page hides the menus
+            document.addEventListener('click', function() {
+                  document.querySelectorAll('.menu').forEach(function(m) {
+                        m.style.display = 'none';
+                  });
+            });
+      </script>
+      <script src="./bootstrap/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

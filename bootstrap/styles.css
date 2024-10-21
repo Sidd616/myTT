@@ -1,0 +1,319 @@
+body {
+      font-family: Arial, sans-serif;
+      background-color: #FEFFFE;
+      height: 100vh;
+      overflow-x: hidden;
+
+}
+
+h2 {
+      margin-bottom: 12px;
+}
+
+h3 {
+      font-weight: lighter;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin-left: 30px;
+}
+
+.navigation {
+      border: 1px solid #ddd;
+      background-color: #F8F9FA;
+      width: 20%;
+      margin: 20px;
+      height: 300px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+}
+
+.main {
+      /* border: 1px solid #ddd; */
+      width: 90%;
+      margin: 20px;
+      height: fit-content;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+      
+}
+
+#navbarNavDarkDropdown {
+      margin-right: 10px;
+}
+
+.profile {
+      border-radius: 50%;
+      margin-right: 4px;
+      margin-bottom: 4px;
+}
+
+#homenav {
+      margin-top: 0px;
+      margin-bottom: 0px;
+      padding-top: 0px;
+      padding-bottom: 0px;
+      padding-left: 0px;
+      padding-right: 0px;
+      box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px;
+
+}
+
+#bell {
+      color: slategray;
+      padding: 5px;
+      margin-bottom: 8px;
+      cursor: pointer;
+}
+
+#bell:hover {
+      color: black;
+}
+
+hr:not(.dead) {
+      border: 0;
+      height: 1px;
+      background: #333;
+      background-image: linear-gradient(to right, #ccc, #333, #ccc);
+      width: 90%;
+      margin: auto;
+}
+
+/* Hide scrollbar */
+::-webkit-scrollbar {
+      width: 0;
+  }
+  
+  /* Optional: Firefox scrollbar */
+  * {
+      scrollbar-width: none;
+  }
+
+  html {
+      scroll-behavior: smooth;
+    }
+
+    navbar{
+      width: 100vw;
+      display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 25px;
+    padding-right: 25px;
+    align-items: center;
+    }
+
+    .topbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px 15px;
+    align-items: center;
+    background-color: #F8F9FA;
+    border-bottom: 1px solid #ddd;
+    box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px;
+    
+    }
+
+    .offcanvas-body{
+      padding: 0;
+    }
+
+    .navcanvas{
+      color: #7D7C7C;
+    }
+
+    :hover.navcanvas{
+      color: #191717;
+    }
+
+    .sidebar-links{
+      padding: 10px 30px;
+    }
+  
+    .sidebar-options{
+      color: #222831;
+      font-weight: bolder;
+      /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+      text-decoration: none;
+      font-size:xx-large;
+
+      position: relative; /* Required for pseudo-element positioning */
+    display: inline-block;
+    transition: #222831 0.3s ease;
+      
+    }
+
+    .sidebar-options a{
+      text-decoration: none;
+      
+    }
+
+    .sidebar-options::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: currentColor; /* Uses the text color */
+      transition: transform 0.3s ease, opacity 0.3s ease; /* Transition for underline */
+      transform: scaleX(0); /* Initially no underline */
+      transform-origin: bottom right;
+      opacity: 0; /* Initially invisible */
+  }
+  
+  .sidebar-options:hover::before {
+      transform: scaleX(1); /* Full underline on hover */
+      transform-origin: bottom left;
+      opacity: 1; /* Show underline on hover */
+  }
+
+    .new-project{
+      position: relative;
+    margin-left: 59%;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    white-space: nowrap;
+      
+    }
+
+    .offcanvas-body{
+      position: relative;
+      height: 100vh;
+    }
+
+    .page{
+      height:100vh;
+      justify-content:center;
+    }
+
+    .modal-backdrop {
+      z-index: 10;
+    }
+
+    #addProject{
+      z-index: 1800;
+    }
+
+    .alert-fixed-top {
+      position: fixed; /* Fixed positioning */
+      top: 100px; /* 100px from the top */
+      left: 0;
+      right: 0;
+      z-index: 1050; /* Ensure it's above other content */
+      margin: 0 auto; /* Center the alert horizontally */
+      width: fit-content; /* Adjust width to fit the content */
+      max-width: 90%; /* Max-width to prevent too wide alerts on large screens */
+    }
+
+    .activeformque{
+      padding: 0 30px;
+      margin-bottom: 30px;
+    }
+
+
+    /* The side navigation menu */
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #31363F; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav .sideA, .drop-bt {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+  border: none;
+  background: none;
+  outline: none;
+  text-align: left;
+  white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide any overflow */
+    text-overflow: ellipsis; /* Add ellipsis (...) for text overflow */
+    cursor: pointer;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav .sideA:hover, .drop-bt:hover {
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+.sidenav .active {
+  background-color: #868686;
+  color: white;
+  width: 100%;
+  margin: 5px 0px;
+}
+
+/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+.dropdown-container {
+  display: none;
+  background-color: #262626;
+  padding: 3px 8px 8px 8px;
+}
+
+/* Optional: Style the caret down icon */
+.fa-caret-down {
+  float: right;
+  padding-right: 8px;
+}
+
+.links-bar{
+  min-height: 90%;
+}
+
+.inner{
+  background-color: #343a40;
+  
+    border: 2px solid #ffd1d1;
+  
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#body {
+  transition: margin-left .5s;
+  padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav .sideA {font-size: 18px;}
+}
+
+#hamicon{
+  cursor: pointer;
+}
+/* Define the default color */
+#hamburger path {
+
+  fill: #7D7C7C;
+  transition: 0.3s;
+}
+
+/* Define the hover color */
+#hamburger:hover path {
+  fill: #111;
+}
+
